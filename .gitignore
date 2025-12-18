@@ -1,0 +1,6 @@
+.\#*
+\#*
+*build*/
+sdkconfig*
+.gdb_history
+.direnv

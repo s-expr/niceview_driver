@@ -1,0 +1,5 @@
+#define SPI_GPIO_CS 15
+#define SPI_GPIO_SCLK 14
+#define SPI_GPIO_MOSI 13
+#define SPI_SCLK_FREQ 1000000
+

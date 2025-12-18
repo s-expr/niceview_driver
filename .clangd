@@ -1,0 +1,5 @@
+CompileFlags:
+  CompilationDatabase: build.clang/
+  Add:
+    - -isystem
+    - /nix/store/n0zdk9cgdv491hrds8ayrp1id8c08blm-xtensa-esp-elf-esp-idf-v5.5.1/xtensa-esp-elf/xtensa-esp-elf/include/
