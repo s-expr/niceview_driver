@@ -17,13 +17,20 @@
           bear
           jq
         ];
-        toolchain = esp-idf.packages.${system}.esp-idf-xtensa.tools.xtensa-esp-elf;
+        toolchain = esp-idf.packages.${system}.esp-idf-xtensa;
+        stdenv = esp-idf.packages.${system}.esp-idf-xtensa.tools.xtensa-esp-elf;
+        shell = esp-idf.devShells.${system}.esp-idf-full.overrideAttrs (default: {
+            nativeBuildInputs = default.nativeBuildInputs ++ extraPkgs;
+            buildInputs = default.buildInputs ++ extraPkgs;
+        });
       in
       {
-        devShells.default =
-          esp-idf.devShells.${system}.esp-idf-full.overrideAttrs (default: {
-            nativeBuildInputs = default.nativeBuildInputs ++ extraPkgs;
+        toolchain = toolchain;
+        shell = shell;
+        devShells.default = pkgs.mkShellNoCC {
+            inputsFrom = [ shell ];
             IDF_TOOLCHAIN="gcc";
+            IDF_TARGET="esp32s3";
             shellHook = (default.shellHook or "") + ''
             export CLANGD_QUERY_DRIVER="$(which clang),$(which clang++)"
                 cat > .clangd <<EOF
@@ -31,10 +38,10 @@ CompileFlags:
   CompilationDatabase: build.clang/
   Add:
     - -isystem
-    - ${toolchain}/xtensa-esp-elf/xtensa-esp-elf/include/
+    - ${stdenv}/xtensa-esp-elf/xtensa-esp-elf/include/
 EOF
 '';
-          });
+        };
       }
     );
 }
